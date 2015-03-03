@@ -34,6 +34,32 @@ if ($app['debug']) {
 }
 
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
+$app->register(new Silex\Provider\SessionServiceProvider());
+
+/**
+ * Redis Session Provider
+ * ----------------------
+ * Replace built-in PHP Session backend with redis
+ */
+$app->register(new \Predis\Silex\ClientsServiceProvider(), array(
+    'predis.clients' => array(
+        'db'      => 'tcp://' . $app['conf']['app.redis.host'],
+        'session' => array(
+            'parameters' => 'tcp://' . $app['conf']['app.redis.host'],
+            'options'    => array(
+                'prefix' => $app['conf']['app.redis.prefix'] . ':'
+            ),
+        ),
+    ),
+));
+$app->register(new Silex\Provider\SessionServiceProvider(), array(
+    'session.storage.handler' => $app->share(function () use ($app) {
+        $client = $app['predis']['session'];
+        $options = array('gc_maxlifetime' => 300);
+        $handler = new \Predis\Session\Handler($client, $options);
+        return $handler;
+    })
+));
 
 /**
  * Dependency Injection
@@ -42,39 +68,29 @@ $app->register(new Silex\Provider\ServiceControllerServiceProvider());
  * to the component needs.
  */
 
-/** Symfony session, request, and response Injection */
-$app['session'] = function () use ($app) {
-    return \Symfony\Component\HttpFoundation\Session;
-};
+/** Symfony request and response Injection */
 $app['request'] = function () use ($app) {
-    return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-};
-$app['response'] = function () use ($app) {
-    return \Symfony\Component\HttpFoundation\Response;
+    return Symfony\Component\HttpFoundation\Request::createFromGlobals();
 };
 
 /** Model Injection */
 $app['facebookModel'] = function () use ($app) {
-    $clientID = $app['conf']['fb.client.id'];
-    $clientSecret = $app['conf']['fb.client.secret'];
-    $redirectURI = $app['conf']['fb.client.redirect'];
-    $scopes = $app['conf']['fb.client.scopes'];
-    return new \tinderweb\Model\FacebookModel(
-        new \League\OAuth2\Client\Provider\Facebook([
-            'clientId' => $clientID,
-            'clientSecret' => $clientSecret,
-            'redirectUri' => $redirectURI,
-            'scopes' => $scopes
+    return new tinderweb\Model\FacebookModel(
+        new League\OAuth2\Client\Provider\Facebook([
+            'clientId'     => $app['conf']['fb.client.id'],
+            'clientSecret' => $app['conf']['fb.client.secret'],
+            'redirectUri'  => $app['conf']['fb.client.redirect'],
+            'scopes'       => $app['conf']['fb.client.scopes']
         ]),
-        new \League\OAuth2\Client\Grant\RefreshToken(),
+        new League\OAuth2\Client\Grant\RefreshToken(),
         $app['request']
     );
 };
 
 /** Controller Injection */
 $app['index.controller'] = $app->share(function () use ($app) {
-    return new \tinderweb\Controllers\MainController($app, $app['facebookModel']);
+    return new tinderweb\Controllers\MainController($app, $app['facebookModel']);
 });
 $app['login.controller'] = $app->share(function () use ($app) {
-    return new \tinderweb\Controllers\LoginController($app, $app['facebookModel']);
+    return new tinderweb\Controllers\LoginController($app, $app['facebookModel']);
 });

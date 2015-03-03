@@ -26,6 +26,6 @@ class MainController extends BaseController
 
     public function index()
     {
-        return 'hello';
+        return 'oyiii';
     }
 }

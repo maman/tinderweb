@@ -17,6 +17,8 @@ return [
     'app.log'            => $basedir . 'logs/app-' . date('Y-m-d') . '.log',
     'app.php.log'        => $basedir . 'logs/php-' . date('Y-m-d') . '.log',
     'app.redis'          => true,
+    'app.redis.host'     => '127.0.0.1',
+    'app.redis.prefix'   => 'tinderweb',
     'app.layout.cache'   => $basedir . 'cache',
 
     /** Facebook API Settings */

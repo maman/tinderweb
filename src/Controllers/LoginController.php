@@ -2,6 +2,9 @@
 
 namespace tinderweb\Controllers;
 
+use Silex\Application;
+use tinderweb\Model\FacebookModel;
+
 /**
  * Login Controller
  * ----------------
@@ -31,10 +34,14 @@ class LoginController extends BaseController
 
     public function getLogin()
     {
-        if ($app['request']->get('code') === null) {
+        if ($this->app['request']->get('code') === null) {
             $authUrl = $this->facebookModel->getAuthUrl();
+            $this->app['session']->set('oauth2state', $this->facebookModel->getAuthState());
+            $this->app->redirect($authUrl);
+        } elseif ($this->app['request']->get('state') === null || $this->app['request']->get('state') !== $this->app['session']->get('oauth2state')) {
+            $this->app['session']->delete('oauth2state');
         } else {
-            $this->app->redirect('/', 304);
+            return 'yeaaaa';
         }
     }
 

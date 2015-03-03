@@ -38,7 +38,7 @@ class FacebookModel
      * Facebook token
      * @var string
      */
-    private $token;
+    private $token = '';
 
     /**
      * Construct FacebookModel Class
@@ -115,7 +115,7 @@ class FacebookModel
      */
     public function getAuthState()
     {
-        return $this->facebookProvider->state();
+        return $this->facebookProvider->state;
     }
 
     /**
