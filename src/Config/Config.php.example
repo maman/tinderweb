@@ -8,22 +8,21 @@
  */
 
 $basedir = __DIR__ . '/../';
-$clientKeys = require __DIR__ . '/clientkey.php';
 
 return [
     /** Application Settings */
-    'app.base.url'       => 'http://tinderweb.dev',
-    'app.environment'    => 'development',
+    'app.base.url'       => '',
+    'app.environment'    => 'development', # or 'production'
     'app.log'            => $basedir . 'logs/app-' . date('Y-m-d') . '.log',
     'app.php.log'        => $basedir . 'logs/php-' . date('Y-m-d') . '.log',
     'app.redis'          => true,
-    'app.redis.host'     => '127.0.0.1',
-    'app.redis.prefix'   => 'tinderweb',
+    'app.redis.host'     => '',
+    'app.redis.prefix'   => '',
     'app.layout.cache'   => $basedir . 'cache',
 
     /** Facebook API Settings */
-    'fb.client.id'       => $clientKeys['client.id'],
-    'fb.client.secret'   => $clientKeys['client.secret'],
+    'fb.client.id'       => '',
+    'fb.client.secret'   => '',
     'fb.client.redirect' => 'https://www.facebook.com/connect/login_success.html',
     'fb.client.scopes'   => [
         'basic_info',
