@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * Configuration file
+ * ------------------
+ * This file is responsible for defining
+ * the configuration of tinderweb application.
+ */
+
+$basedir = __DIR__ . '/../';
+$clientKeys = require __DIR__ . '/clientkey.php';
+
+return [
+    /** Application Settings */
+    'app.base.url'       => 'http://tinderweb.dev',
+    'app.environment'    => 'development',
+    'app.log'            => $basedir . 'logs/app-' . date('Y-m-d') . '.log',
+    'app.php.log'        => $basedir . 'logs/php-' . date('Y-m-d') . '.log',
+    'app.redis'          => true,
+    'app.layout.cache'   => $basedir . 'cache',
+
+    /** Facebook API Settings */
+    'fb.client.id'       => $clientKeys['client.id'],
+    'fb.client.secret'   => $clientKeys['client.secret'],
+    'fb.client.redirect' => 'https://www.facebook.com/connect/login_success.html',
+    'fb.client.scopes'   => [
+        'basic_info',
+        'email',
+        'public_profile',
+        'user_about_me',
+        'user_activities',
+        'user_birthday',
+        'user_education_history',
+        'user_friends',
+        'user_interests',
+        'user_likes',
+        'user_location',
+        'user_photos',
+        'user_relationship_details'
+    ]
+];

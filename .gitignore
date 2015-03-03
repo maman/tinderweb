@@ -1,0 +1,7 @@
+composer.lock
+node_modules
+bower_components
+.idea
+vendor
+
+npm-debug.log

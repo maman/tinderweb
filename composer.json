@@ -1,0 +1,30 @@
+{
+  "name": "maman/tinderweb",
+  "version": "0.0.1",
+  "description": "Tinder web interface",
+  "require": {
+    "twig/twig": "~1.16",
+    "league/oauth2-client": "0.9.0",
+    "silex/silex": "1.2.3",
+    "doctrine/common": "~2.4",
+    "filp/whoops": "~1.1",
+    "dongww/silex-debugbar": "0.3.*",
+    "monolog/monolog": "~1.12"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.5"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Achmad Mahardi",
+      "email": "achmad@mahardi.me"
+    }
+  ],
+  "autoload" : {
+    "psr-4": {
+      "tinderweb\\": "src/"
+    }
+  },
+  "minimum-stability": "stable"
+}
