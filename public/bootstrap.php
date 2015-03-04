@@ -97,7 +97,3 @@ $app['login.controller'] = $app->share(function () use ($app) {
     $facebookModel = $app['facebook.model'];
     return new \tinderweb\Controllers\LoginController($app, $facebookModel);
 });
-$app['api.controller'] = $app->share(function() use ($app) {
-    $tinderModel = $app['tinder.model'];
-    return new \tinderweb\Controllers\ApiController($app, $tinderModel);
-});

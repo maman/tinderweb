@@ -71,7 +71,7 @@ class FacebookModel
 
     /**
      * Get Facebook access token
-     * @return string
+     * @return AccessToken
      */
     public function getAccessToken()
     {
