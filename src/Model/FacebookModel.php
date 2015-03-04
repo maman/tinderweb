@@ -4,6 +4,7 @@ namespace tinderweb\Model;
 
 use League\OAuth2\Client\Provider\Facebook as FacebookProvider;
 use League\OAuth2\Client\Grant\RefreshToken as GrantRefreshToken;
+use League\OAuth2\Client\Token\AccessToken as AccessToken;
 use Symfony\Component\HttpFoundation\Request as Request;
 
 /**
@@ -33,12 +34,6 @@ class FacebookModel
      * @var Request
      */
     private $request;
-
-    /**
-     * Facebook token
-     * @var string
-     */
-    private $token = '';
 
     /**
      * Construct FacebookModel Class
@@ -80,24 +75,11 @@ class FacebookModel
      */
     public function getAccessToken()
     {
-        $this->token = $this->facebookProvider->getAccessToken(
+        $token = $this->facebookProvider->getAccessToken(
             'authorization_code',
             ['code' => $this->request->get('code')]
         );
-        return $this->token;
-    }
-
-    /**
-     * Refresh Facebook access token
-     * @return string
-     */
-    public function getRefreshToken()
-    {
-        $this->token = $this->facebookProvider->getAccessToken(
-            $this->grantRefreshToken,
-            ['refreshToken' => $this->token->refreshToken]
-        );
-        return $this->token;
+        return $token;
     }
 
     /**
@@ -119,11 +101,24 @@ class FacebookModel
     }
 
     /**
-     * Get Facebook User ID
-     * @return string
+     * Refresh Facebook access token
+     * @return AccessToken
      */
-    public function getUserId()
+    public function getRefreshToken(AccessToken $token)
     {
-        return $this->facebookProvider->getUserid();
+        $token = $this->facebookProvider->getAccessToken(
+            $this->grantRefreshToken,
+            ['refreshToken' => $token->refreshToken]
+        );
+        return $token;
+    }
+
+    /**
+     * Get Facebook User Details
+     * @return UserDetails
+     */
+    public function getUserDetails(AccessToken $token)
+    {
+        return $this->facebookProvider->getUserDetails($token);
     }
 }

@@ -5,11 +5,11 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['jasmine'],
     files: [
-      'tests/helpers/**/*.js',
-      'tests/spec/components/**/*.js'
+      'tests/ui/helpers/**/*.js',
+      'tests/ui/spec/components/**/*.js'
     ],
     preprocessors: {
-      'tests/spec/components/**/*.js': ['webpack']
+      'tests/ui/spec/components/**/*.js': ['webpack']
     },
     webpack: {
       cache: true,
@@ -33,8 +33,8 @@ module.exports = function (config) {
       },
       resolve: {
         alias: {
-          'styles': './src/styles',
-          'components': './src/scripts/components'
+          'styles': './public/styles',
+          'components': './public/scripts/components'
         }
       }
     },

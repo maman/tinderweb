@@ -14,8 +14,8 @@ var bootstrap = React.createClass({
 
   render(){
     return (
-      <DocumentTitle title='AventDesk'>
-        <div className='aventdesk'>
+      <DocumentTitle title='TinderWeb'>
+        <div id='wrapper'>
           <Main />
           <RouteHandler {...this.props} />
         </div>

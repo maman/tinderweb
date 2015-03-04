@@ -36,9 +36,6 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'react-hot!babel-loader!jsx-loader?harmony'
     }, {
-      test: /\.scss/,
-      loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
-    }, {
       test: /\.css$/,
       loader: 'style-loader!css-loader'
     }, {

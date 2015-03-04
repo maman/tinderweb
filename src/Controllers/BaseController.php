@@ -15,6 +15,10 @@ use Silex\Application;
  */
 abstract class BaseController
 {
+    /**
+     * Application object
+     * @var Application
+     */
     protected $app;
 
     public function __construct(Application $app)
@@ -22,13 +26,16 @@ abstract class BaseController
         $this->app = $app;
     }
 
-    public function checkAuth()
+    /**
+     * Check whether user is logged in via facebook or not.
+     * @return boolean
+     */
+    public function isLoggedIn()
     {
-        if ($this->app['request']->get('code') === null) {
-            return $this->app->redirect('/login');
-        } elseif ($this->app['request']->get('state') === null || $this->app['request']->get('state') !== $this->app['session']->get('oauth2state')) {
-            $this->app['session']->delete('oauth2state');
-            return $this->app->redirect('/login');
+        if ($this->app['session']->get('accessToken') === null) {
+            return false;
+        } else {
+            return true;
         }
     }
 }

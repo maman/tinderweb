@@ -28,33 +28,35 @@ class LoginController extends BaseController
 
     private function destroyLoginToken()
     {
-
+        $this->app['session']->remove('oauth2state');
+        $this->app['session']->remove('token');
+        $this->app['session']->remove('accessToken');
     }
 
     public function setLoginToken()
     {
-        $this->checkAuth();
-        $this->app['session']->set('token', $this->facebookModel->getAccessToken(
-            'authorization_code',
-            ['code' => $this->app['request']->get('code')]
-        ));
-        $this->app['session']->set('accessToken', $this->facebookModel->getAccessToken(
-            'authorization_code',
-            ['code' => $this->app['request']->get('code')]
-        )->accessToken);
+        $token = $this->facebookModel->getAccessToken();
+        $userDetails = $this->facebookModel->getUserDetails($token);
+        $this->app['session']->set('token', $token);
+        $this->app['session']->set('accessToken', $token->accessToken);
+        $this->app['session']->set('uid', $userDetails->uid);
         return $this->app->redirect('/');
     }
 
     public function getLogin()
     {
-        $this->checkAuth();
-        $authUrl = $this->facebookModel->getAuthUrl();
-        $this->app['session']->set('oauth2state', $this->facebookModel->getAuthState());
-        return $this->app->redirect($authUrl);
+        if ($this->isLoggedIn()) {
+            $this->app->redirect('/');
+        } else {
+            $authUrl = $this->facebookModel->getAuthUrl();
+            $this->app['session']->set('oauth2state', $this->facebookModel->getAuthState());
+            return $this->app->redirect($authUrl);
+        }
     }
 
     public function getLogout()
     {
         $this->destroyLoginToken();
+        return $this->app->redirect('/');
     }
 }

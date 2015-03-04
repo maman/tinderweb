@@ -26,8 +26,10 @@ class MainController extends BaseController
 
     public function index()
     {
-        $this->checkAuth();
-        $this->app['debug_bar']['messages']->addMessage($this->app['session']->get('token'));
-        return 'view debugbar to see token';
+        if ($this->isLoggedIn()) {
+            return $this->app['twig']->render('Pages/Index.twig');
+        } else {
+            return $this->app['twig']->render('Pages/Login.twig');
+        }
     }
 }
