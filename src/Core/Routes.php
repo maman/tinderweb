@@ -12,10 +12,10 @@ return [
         'service'    => 'login.controller',
         'method'     => 'getLogin'
     ], [
-        'httpMethod' => 'POST',
-        'route'      => '/login',
+        'httpMethod' => 'GET',
+        'route'      => '/setToken',
         'service'    => 'login.controller',
-        'method'     => 'postLogin'
+        'method'     => 'setLoginToken'
     ], [
         'httpMethod' => 'GET',
         'route'      => '/logout',

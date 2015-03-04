@@ -51,7 +51,7 @@ class FacebookModel
         GrantRefreshToken $grantRefreshToken,
         Request $request
     ) {
-        $this->provider = $facebookProvider;
+        $this->facebookProvider = $facebookProvider;
         $this->grantRefreshToken = $grantRefreshToken;
         $this->request = $request;
     }

@@ -26,6 +26,8 @@ class MainController extends BaseController
 
     public function index()
     {
-        return 'oyiii';
+        $this->checkAuth();
+        $this->app['debug_bar']['messages']->addMessage($this->app['session']->get('token'));
+        return 'view debugbar to see token';
     }
 }

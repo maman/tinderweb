@@ -21,4 +21,14 @@ abstract class BaseController
     {
         $this->app = $app;
     }
+
+    public function checkAuth()
+    {
+        if ($this->app['request']->get('code') === null) {
+            return $this->app->redirect('/login');
+        } elseif ($this->app['request']->get('state') === null || $this->app['request']->get('state') !== $this->app['session']->get('oauth2state')) {
+            $this->app['session']->delete('oauth2state');
+            return $this->app->redirect('/login');
+        }
+    }
 }

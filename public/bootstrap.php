@@ -9,7 +9,7 @@
 define("SRC_DIR", __DIR__ . "/../src/");
 define("PUBLIC_DIR", __DIR__);
 
-$app = new \Silex\Application();
+$app = new Silex\Application();
 
 $app['conf'] = require SRC_DIR . "Config/Config.php";
 $app['debug'] = ($app['conf']['app.environment'] == 'development' ? true : false);
@@ -41,7 +41,7 @@ $app->register(new Silex\Provider\SessionServiceProvider());
  * ----------------------
  * Replace built-in PHP Session backend with redis
  */
-$app->register(new \Predis\Silex\ClientsServiceProvider(), array(
+$app->register(new Predis\Silex\ClientsServiceProvider(), array(
     'predis.clients' => array(
         'db'      => 'tcp://' . $app['conf']['app.redis.host'],
         'session' => array(
@@ -56,7 +56,7 @@ $app->register(new Silex\Provider\SessionServiceProvider(), array(
     'session.storage.handler' => $app->share(function () use ($app) {
         $client = $app['predis']['session'];
         $options = array('gc_maxlifetime' => 300);
-        $handler = new \Predis\Session\Handler($client, $options);
+        $handler = new Predis\Session\Handler($client, $options);
         return $handler;
     })
 ));
@@ -68,19 +68,15 @@ $app->register(new Silex\Provider\SessionServiceProvider(), array(
  * to the component needs.
  */
 
-/** Symfony request and response Injection */
-$app['request'] = function () use ($app) {
-    return Symfony\Component\HttpFoundation\Request::createFromGlobals();
-};
-
 /** Model Injection */
-$app['facebookModel'] = function () use ($app) {
+$app['facebook.model'] = function() use ($app) {
     return new tinderweb\Model\FacebookModel(
         new League\OAuth2\Client\Provider\Facebook([
-            'clientId'     => $app['conf']['fb.client.id'],
-            'clientSecret' => $app['conf']['fb.client.secret'],
-            'redirectUri'  => $app['conf']['fb.client.redirect'],
-            'scopes'       => $app['conf']['fb.client.scopes']
+            'clientId'        => $app['conf']['fb.client.id'],
+            'clientSecret'    => $app['conf']['fb.client.secret'],
+            'redirectUri'     => $app['conf']['fb.client.redirect'],
+            'scopes'          => $app['conf']['fb.client.scopes'],
+            'graphApiVersion' => 'v2.2'
         ]),
         new League\OAuth2\Client\Grant\RefreshToken(),
         $app['request']
@@ -89,8 +85,10 @@ $app['facebookModel'] = function () use ($app) {
 
 /** Controller Injection */
 $app['index.controller'] = $app->share(function () use ($app) {
-    return new tinderweb\Controllers\MainController($app, $app['facebookModel']);
+    $facebookModel = $app['facebook.model'];
+    return new tinderweb\Controllers\MainController($app, $facebookModel);
 });
 $app['login.controller'] = $app->share(function () use ($app) {
-    return new tinderweb\Controllers\LoginController($app, $app['facebookModel']);
+    $facebookModel = $app['facebook.model'];
+    return new tinderweb\Controllers\LoginController($app, $facebookModel);
 });

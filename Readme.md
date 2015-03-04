@@ -1,5 +1,7 @@
 ## 🔥 Tinderweb <small style="color:#6d6d6d;font-weight:normal">&mdash; Tinder's missing web client.</small>
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/maman/tinderweb/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/maman/tinderweb/?branch=master)
+
 Tinderweb is a PHP web application which enables [tinder](http://gotinder.com) operation via web browser. The live version of this application can be accessed from [here](http://blahblah.blah).
 
 ## Requirements
